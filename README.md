@@ -2,6 +2,8 @@
 
 Bienvenido! En este pequeño proyecto dejo un código funcional donde se crea un chat personalizado usando Gemini API
 
+La idea de este proyecto nació gracias al hecho de que en el proyecto [Asistente-Virtual-Python](https://github.com/Ale6100/Asistente-Virtual-Python.git) quería implementarle IA. La parte central de ese nuevo código creado lo dejo acá de manera pública.
+
 ## Pre-requisitos 📋
 
 El código está hecho y testeado utilizando la versión 3.12.3 de Python y un Windows 11 de 64bits
