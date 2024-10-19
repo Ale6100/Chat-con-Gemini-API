@@ -1,12 +1,12 @@
-# Creación y entrenamiento de un chat simple usando la API de Gemini
+# Creación y entrenamiento de un chat simple usando Llama 3
 
-Bienvenido! En este pequeño proyecto dejo un código funcional donde se crea un chat personalizado usando Gemini API
+Bienvenido! En este pequeño proyecto dejo un código funcional donde se crea un chat personalizado usando Llama 3 gracias a la API de Groq
 
 La idea de este proyecto nació gracias al hecho de que en el proyecto [Asistente-Virtual-Python](https://github.com/Ale6100/Asistente-Virtual-Python.git) quería implementarle IA. La parte central de ese nuevo código creado lo dejo acá de manera pública.
 
 ## Pre-requisitos 📋
 
-El código está hecho y testeado utilizando la versión 3.12.3 de Python y un Windows 11 de 64bits
+El código está hecho y testeado utilizando la versión 3.12.5 de Python y un Windows 11 de 64bits
 
 ## Instalación 🔧 (en windows)
 
@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 Recuerda que debes activar el entorno virtual siempre que desees usarlo
 
-Es necesaria la creación de una variable de entorno mediante la elaboración de un archivo .env. Este archivo debe ser completado con el siguiente campo, el cual deberá incluir el valor de tu API key de Gemini. Si no tienes una, consíguela [aquí](https://aistudio.google.com/app/apikey)
+Es necesaria la creación de una variable de entorno mediante la elaboración de un archivo .env. Este archivo debe ser completado con el siguiente campo, el cual deberá incluir el valor de tu API key de Groq. Si no tienes una, consíguela [aquí](https://console.groq.com/keys)
 
 ```env
 API_KEY = X # Coloca aquí tu API Key

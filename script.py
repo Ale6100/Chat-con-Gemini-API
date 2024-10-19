@@ -1,28 +1,8 @@
 import os
-
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
-
-safety_settings = [ # Para quitarle la censura a la IA
-    {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_NONE"
-    },
-    {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_NONE"
-    }
-]
 
 introduccion = """
 Este es tu único contexto, lo único que sabes de tí:
@@ -37,25 +17,62 @@ Comencemos:""" # Acá puedes personalizar el comportamiento de la IA
 
 def train_ai(): # Entrena a la IA para que entienda qué debe responder en base a lo que le piden
     try:
-        genai.configure(api_key=os.getenv('API_KEY')) # Coloca en un archivo .env tu API Key. Lee el readme para más información
-        genai.GenerationConfig(candidate_count=0) # Cantidad de respuestas que la IA puede dar al mismo tiempo
+        client = Groq(api_key = os.getenv('API_KEY')) # Coloca en un archivo .env tu API Key. Lee el readme para más información
 
-        model = genai.GenerativeModel('gemini-pro')
-        chat = model.start_chat(history=[])
+        intro = introduccion # El primer mensaje lo enviamos para "entrenarlo"
 
-        chat.send_message(introduccion, safety_settings=safety_settings) # El primer mensaje lo enviamos para "entrenarlo"
+        historial = [{
+            "role": "system",
+            "content": intro
+        }]
 
-        return chat
+        response = client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages = historial,
+            temperature=0,
+        ).choices[0].message.content
+
+        historial.append({
+            "role": "assistant",
+            "content": response
+        })
+
+        return historial
+
+    except Exception as e:
+        print(e)
+
+def enviar_mensaje(mensaje: str, historial: list[str]):
+    try:
+        client = Groq(api_key = os.getenv('API_KEY'))
+
+        historial.append({
+            "role": "user",
+            "content": mensaje
+        })
+
+        response = client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages = historial,
+            temperature=0,
+        ).choices[0].message.content
+
+        historial.append({
+            "role": "assistant",
+            "content": response
+        })
+
+        return historial
     except Exception as e:
         print(e)
 
 chat = train_ai()
 
 # A modo de ejemplo envío dos mensajes
-response_ia = chat.send_message("Cómo te llamas?", safety_settings=safety_settings)
-print(response_ia.text)
+chat = enviar_mensaje("Cómo te llamas?", chat)
+print(chat[-1]["content"])
 
-response_ia = chat.send_message("Entiendo. Decime la diferencia entre http y https", safety_settings=safety_settings)
-print(response_ia.text)
+chat = enviar_mensaje("Entiendo. Decime la diferencia entre http y https", chat)
+print(chat[-1]["content"])
 
 # Siguiendo el mismo patrón, se puede continuar la conversación como si fuera un chat
